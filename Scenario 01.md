@@ -43,3 +43,55 @@ docker log <friendly-name|container-id>
 
 ## 存取（Access）容器
 
+我們將容器運行起來，但容器仍舊屬於無法和外界溝通的情況，等於只是一個在主機上運行、與外界無聯繫的盒子。如果容器外面的process想要access這個容器，就需要這個容器有開通一個port讓外面的process可以連接。
+Jane發現使用以下指令便可以在運行容器的同時時和容器的port做連接：
+```
+docker run -p <host-port>:<container-port> IMAGE_NAME
+```
+Jane現在要做的事情是為新建的Redis容器取名，並且讓這個容器的某個port開通，並且和這個port做連接。
+使用以下指令便可以一次完成這三件事：
+```
+docker run -d --name redisHostPort -p 6379:6379 redis:latest
+```
+這個指令做了以下幾件事情：
+- 運行redis:latest這個映像檔成為一個容器
+- 將這個容器的friendly-name取為"redisHostPort"
+- 將主機的6379這個port，和容器的6379這個port做連接（作為溝通橋樑的兩端）
+- 在背景中執行
+
+另外，也可以指定IP位址：
+```
+-p 127.0.0.1:6379:6379
+```
+
+如果今天沒有指定```host-port```，主機會隨便指定一個可以使用的port去和container的port做連接。
+而這時會不知道主機使用的port是哪一個，但我們可以經由以下指令看到：
+```
+docker port redis_name 6379
+```
+
+## 讓容器內資料永久存在不消失
+
+幾天後，Jane發現每當她刪除並重新創建容器時，裡面曾經存的資料都會消失。這並不是她樂見的事情。將主機的某個目錄與容器內某個目錄做連接，便可以解決這個問題。
+以下是在運行容器的同時將某個主機的目錄與某個容器的目錄做連接所需要多設定的option：
+```
+-v <host-dir>:<container-dir>
+```
+docker run -d --name redisMapped -v /opt/docker/data/redis:/data redis:latest
+```
+這個指令做了以下幾件事情：
+- 運行redis:latest這個映像檔成為一個容器
+- 將這個容器的friendly-name取為"redisMapped"
+- 將主機的"opt/docker/data/redis"與容器的"/data"做連接
+- 在背景執行這個容器
+
+這個設定的結果是，當容器對這個目錄內資料做新增、編輯、移除等變動，主機內的那個目錄也會同步做動作。（兩者下```ls```指令時所看到的內容必定相同）
+
+
+## 使用容器的shell介面
+如果沒有在運行時下```-d```的option，容器就會在前端執行。
+如果進入容器使用它的shell，會用以下指令：
+```
+docker run -it ubuntu bash
+```
+＊當使用完畢退出shell介面時，會發現整個容器也會跟著被停止。
