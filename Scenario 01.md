@@ -77,6 +77,9 @@ docker port redis_name 6379
 ```
 -v <host-dir>:<container-dir>
 ```
+
+以下是一個範例指令：
+```
 docker run -d --name redisMapped -v /opt/docker/data/redis:/data redis:latest
 ```
 這個指令做了以下幾件事情：
@@ -89,6 +92,7 @@ docker run -d --name redisMapped -v /opt/docker/data/redis:/data redis:latest
 
 
 ## 使用容器的shell介面
+
 如果沒有在運行時下```-d```的option，容器就會在前端執行。
 如果進入容器使用它的shell，會用以下指令：
 ```
