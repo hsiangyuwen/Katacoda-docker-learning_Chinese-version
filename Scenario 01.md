@@ -19,12 +19,12 @@ docker search redis
 ```
 
 Jane藉由搜尋知道了他想要運行起來的映像檔名為"redis"，並且想要運行最新的版本。另外，因為Redis是資料庫，Jane希望它能在背景中運行。
-以下指令能達到以上三個目標：
+以下指令能達到上述的目標：
 ```
 docker run -d redis:latest
 ```
 
-以下指令可以列出所有正在運行的容器，以及它們的ID、映像檔名、名字：
+以下指令可以列出所有正在運行的容器，以及它們的ID(container-id)、映像檔名(repository:tag)、名字(friendly-name)：
 ```
 docker ps
 ```
@@ -36,7 +36,7 @@ docker inspect <friendly-name|container-id>
 
 以下指令可以秀出所有output內容（被寫進stderr或stdout的內容）。
 ```
-docker log <friendly-name|container-id>
+docker logs <friendly-name|container-id>
 ```
 ＊上述的friendly-name就是```docker ps```所顯示的name，剛剛在做```docker run```的時候並沒有指定名字，所以docker會自動幫我們創建一個。
 
@@ -44,12 +44,12 @@ docker log <friendly-name|container-id>
 ## 存取（Access）容器
 
 我們將容器運行起來，但容器仍舊屬於無法和外界溝通的情況，等於只是一個在主機上運行、與外界無聯繫的盒子。如果容器外面的process想要access這個容器，就需要這個容器有開通一個port讓外面的process可以連接。
-Jane發現使用以下指令便可以在運行容器的同時時和容器的port做連接：
+Jane發現使用以下指令便可以在運行容器時，加入以下option便可以和容器的port做連接：
 ```
-docker run -p <host-port>:<container-port> IMAGE_NAME
+-p <host-port>:<container-port>
 ```
 Jane現在要做的事情是為新建的Redis容器取名，並且讓這個容器的某個port開通，並且和這個port做連接。
-使用以下指令便可以一次完成這三件事：
+使用以下範例指令便可以一次完成這三件事：
 ```
 docker run -d --name redisHostPort -p 6379:6379 redis:latest
 ```
@@ -94,8 +94,8 @@ docker run -d --name redisMapped -v /opt/docker/data/redis:/data redis:latest
 ## 使用容器的shell介面
 
 如果沒有在運行時下```-d```的option，容器就會在前端執行。
-如果進入容器使用它的shell，會用以下指令：
+另外，如果想要進入容器使用它的shell，會用'''-it'''這個option。以下是一個範例指令：
 ```
 docker run -it ubuntu bash
 ```
-＊當使用完畢退出shell介面時，會發現整個容器也會跟著被停止。
+＊當使用完畢退出shell介面(exit)時，會發現整個容器也會跟著被停止。
