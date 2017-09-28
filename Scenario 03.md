@@ -50,7 +50,7 @@ FROM nginx:1.11-alpine
  **註：這是「運行nginx」的指令：`nginx -g daemon off;`。*
 
 <br/>
-此章要製作的dockerfile內容如下：
+此章要製作的dockerfile內容如下：  
 ```
 FROM nginx:1.11-alpine
 COPY index.html /usr/share/nginx/html/index.html
