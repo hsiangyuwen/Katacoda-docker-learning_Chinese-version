@@ -36,6 +36,7 @@ docker run -d -p 3000:3000 --link redis-server:redis katacoda/redis-node-docker-
 ```
 docker run -it --link redis-server:RS redis redis-cli -h RS
 ```
-> 拿redis這個映像檔運行起來一個容器，連接到redis-server，並且把redis-server取一個別名叫做RS。
-> 利用 `-it` 進到容器的CLI介面
-> 輸入 `redis-cli -h RS` 指令。`redis-cli` 是運行redis client的command、`-h` 是指定連到哪裡的option、RS是redis-server的alias。在這裡我們真正用上了alias，可以想像在複雜的容器運行環境中，alias是一個重要的功能。
+> 1. 拿redis這個映像檔運行起來一個容器，連接到redis-server，並且把redis-server取一個別名叫做RS。
+> 2. 利用 `-it` 進到容器的CLI介面
+> 3. 輸入 `redis-cli -h RS` 指令。`redis-cli` 是運行redis client的command、`-h` 是指定連到哪裡的option、RS是redis-server的alias。  
+> 在這裡我們真正用上了alias，可以想像在複雜的容器運行環境中，alias是一個重要的功能。
